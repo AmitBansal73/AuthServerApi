@@ -1,0 +1,6 @@
+@DataServerApi_HostAddress = http://localhost:5258
+
+GET {{DataServerApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
