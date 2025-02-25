@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy the .csproj file and restore dependencies
-COPY ["AuthServerApi.csproj", "."]
+COPY ["AuthServerApi/AuthServerApi.csproj", "."]
 #COPY *.csproj ./
 RUN dotnet restore
 
