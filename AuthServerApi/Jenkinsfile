@@ -1,1 +1,51 @@
-﻿
+﻿pipeline{
+    agent any
+    
+    stages{
+        stage ('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+}
+        stage('Git Checkout'){
+            steps{
+                 git credentialsId: 'GitHubCredential', url: 'https://github.com/AmitBansal73/AuthServerApi'
+            }
+        }
+    
+        stage('Restore packages') {
+            steps {
+                bat "dotnet restore ${workspace}\\AuthServerApi\\AuthServerApi.csproj"
+            }
+        }
+        
+        stage('Clean') {
+          steps {
+            bat "msbuild.exe \"${workspace}\\AuthServerApi\\AuthServerApi.csproj\" /nologo /nr:false /p:platform=\"x64\" /p:configuration=release /t:clean"
+          }
+        }
+        stage('Build') {
+         steps {
+          bat "msbuild.exe ${workspace}\\AuthServerApi\\AuthServerApi.csproj /nologo /nr:false  /p:platform=\"x64\" /p:configuration=\"release\" /t:clean;restore;rebuild"
+         }
+}
+        
+        stage ('Running unit tests')
+        {
+            steps{
+                echo 'Running Unit Test'
+            }
+        }
+        stage ('building docker image'){
+            steps{
+                bat 'docker build -t auth-server -f AuthServerApi/Dockerfile .'
+            }
+        }
+        
+        stage ("deploying om container"){
+            steps{
+                bat 'docker run -dt -p 51234:8080 -e "ASPNETCORE_ENVIRONMENT=Production" auth-server'
+            }
+        }
+    }
+}

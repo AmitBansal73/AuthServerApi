@@ -12,7 +12,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var db_host_url = Environment.GetEnvironmentVariable("DB_HOST_URL");
+var db_host_port = Environment.GetEnvironmentVariable("DB_HOST_PORT");
+var db_name = Environment.GetEnvironmentVariable("DB_NAME");
+var db_user = Environment.GetEnvironmentVariable("DB_USER");
+var db_password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
+var connectionString = builder.Configuration.GetConnectionString("default-connection");
+
+if (db_host_url != null && !string.IsNullOrEmpty(db_host_url)) {
+    connectionString = $"Server={db_host_url},{db_host_port};Database={db_name};User={db_user};password={db_password};Trusted_Connection=False;TrustServerCertificate=True;";
+}
 
 // Add services to the container.
 
@@ -25,7 +35,7 @@ builder.Services.Configure<AuthenticationConfiguration>(builder.Configuration.Ge
 //builder.Services.AddSingleton<AuthenticationConfiguration>();
 
 builder.Services.AddDbContext<AuthenticationDbContext>(options=>
-options.UseSqlServer(builder.Configuration.GetConnectionString("default-connection"), 
+options.UseSqlServer(connectionString, 
 sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
 
 builder.Services.AddSingleton<AccessTokenGenerator>();
@@ -61,6 +71,12 @@ builder.Services.AddCors(options =>
         });
 });
 var app = builder.Build();
+
+    var service = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScopeFactory));
+    using (var db = service.CreateScope().ServiceProvider.GetService<AuthenticationDbContext>())
+    {
+        db.Database.Migrate();
+    }
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
