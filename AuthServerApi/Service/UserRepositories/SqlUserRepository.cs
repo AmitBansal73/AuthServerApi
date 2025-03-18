@@ -12,6 +12,12 @@ namespace AuthServerApi.Service.UserRepositories
         {
             _context=authenticationDbContext;
         }
+
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            return await _context.users.Skip(0).Take(10).ToListAsync();
+        }
+
         public async Task<User> GetByEmail(string email)
         {
             return await _context.users.FirstOrDefaultAsync(x => x.Email == email);

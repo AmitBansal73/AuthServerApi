@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServerApi", "AuthServerApi\AuthServerApi.csproj", "{BA7D85FA-04F8-497F-AC21-AC024762F295}"
 EndProject
@@ -15,12 +15,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BA7D85FA-04F8-497F-AC21-AC024762F295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA7D85FA-04F8-497F-AC21-AC024762F295}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA7D85FA-04F8-497F-AC21-AC024762F295}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA7D85FA-04F8-497F-AC21-AC024762F295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA7D85FA-04F8-497F-AC21-AC024762F295}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA7D85FA-04F8-497F-AC21-AC024762F295}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{67F8BFE9-24C5-4B9E-90F4-E5F73E53C572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67F8BFE9-24C5-4B9E-90F4-E5F73E53C572}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67F8BFE9-24C5-4B9E-90F4-E5F73E53C572}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67F8BFE9-24C5-4B9E-90F4-E5F73E53C572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F8BFE9-24C5-4B9E-90F4-E5F73E53C572}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F8BFE9-24C5-4B9E-90F4-E5F73E53C572}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

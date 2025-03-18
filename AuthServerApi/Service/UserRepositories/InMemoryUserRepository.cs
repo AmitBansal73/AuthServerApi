@@ -5,6 +5,12 @@ namespace AuthServerApi.Service.UserRepositories
     public class InMemoryUserRepository : IUserRepository
     {
         private readonly List<User> _users = new List<User>();
+
+        public Task<IEnumerable<User>> GetAll()
+        {
+            return Task.FromResult(_users.Take(10));
+        }
+
         public Task<User> GetByEmail(string email)
         {
             return Task.FromResult(_users.FirstOrDefault( u => u.Email == email));

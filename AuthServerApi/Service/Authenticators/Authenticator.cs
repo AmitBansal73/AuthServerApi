@@ -38,5 +38,23 @@ namespace AuthServerApi.Service.Authenticators
                 RefreshToken = refreshToken
             };
         }
+
+        public void SetTokenInsideCookie(string refreshToken, HttpContext context)
+        {
+            context.Response.Cookies.Append("refreshToken", refreshToken,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddDays(30),
+                    HttpOnly = true,
+                    IsEssential = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
+
+        }
+
+        public void ClearCookie(HttpContext context) {
+            context.Response.Cookies.Delete("refreshToken");
+        }
     }
 }
