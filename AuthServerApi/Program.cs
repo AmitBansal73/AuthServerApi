@@ -24,7 +24,7 @@ if (db_host_url != null && !string.IsNullOrEmpty(db_host_url)) {
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<AuthenticationConfiguration>(builder.Configuration.GetSection("Authentication"));
 //builder.Services.AddSingleton<AuthenticationConfiguration>();
@@ -36,13 +36,20 @@ sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
 
 builder.Services.AddServiceDependencies();
 builder.Services.AddAuthenticationService(builder.Configuration);
-
+//builder.Services.AddAuthentication()
+//        .AddGoogle(googleOptions =>
+//        {
+//            googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+//            googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+//        });
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "http://localhost:4200")
+            policy
+            //.AllowAnyOrigin()
+            .WithOrigins("http://www.localhost:3000", "http://localhost:3000", "http://www.localhost:4200", "http://localhost:4200")
             .AllowAnyHeader()
             .AllowCredentials()
             .AllowAnyMethod();
@@ -59,8 +66,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseRouting();

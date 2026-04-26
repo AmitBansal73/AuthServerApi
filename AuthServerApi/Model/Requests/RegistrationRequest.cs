@@ -21,5 +21,7 @@ namespace AuthServerApi.Model.Requests
         [Required]
         public string mobileNumber { get; set; }
         public DateOnly dob { get; set; }
+
+        public string FCMToken { get; set; } = null;
     }
 }

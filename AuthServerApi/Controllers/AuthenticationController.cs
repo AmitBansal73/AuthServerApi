@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Authentication;
 using Google.Apis.Auth.AspNetCore3;
 using AuthServerApi.Service;
 using Microsoft.AspNetCore.Authentication.Google;
+using Google.Apis.Auth;
+using Azure.Core;
 
 namespace AuthServerApi.Controllers
 {
@@ -28,13 +30,15 @@ namespace AuthServerApi.Controllers
         LinkGenerator _linkGenerator;
         IAccountService _accountService;
         SignInManager<User> _signInManager;
+        protected readonly IConfiguration _configuration;
         public AuthenticationController(
             IUserRepository userRepository,
             RefreshTokenValidator refreshTokenValidator,
             IRefreshTokenRepository refreshTokenRepository,
             Authenticator authenticator,
             LinkGenerator linkGenerator,
-            IAccountService accountService
+            IAccountService accountService,
+            IConfiguration configuration
             )
         {
             _userRepository = userRepository;
@@ -43,6 +47,7 @@ namespace AuthServerApi.Controllers
             _authenticator = authenticator;
             _linkGenerator = linkGenerator;
             _accountService = accountService;
+            _configuration = configuration;
          }
 
 
@@ -203,9 +208,48 @@ namespace AuthServerApi.Controllers
             var authenticatedUserResponse = await _authenticator.Authenticate(user);
             _authenticator.SetTokenInsideCookie(authenticatedUserResponse.RefreshToken, HttpContext);
             var resultURl = $"{returnURL}?accessToken={authenticatedUserResponse.AuthToken}";
-
-            
             return Redirect(resultURl);
+        }
+
+
+        //This method iis used when client side google authentication is done and back api is verifying that
+        [HttpPost("LoginValidate")]
+        public async Task<IActionResult> LoginValidate([FromBody] string credentials)
+        {
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string> { _configuration.GetValue<string>("GoogleAuthentication:client-id") }
+                };
+
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credentials, settings);
+
+                var user = await _userRepository.GetByEmail(payload.Email);
+
+                if (user == null)
+                {
+                    var newUser = new User()
+                    {
+                        Id = Guid.NewGuid(),
+                        Email = payload.Email,
+                        Name = payload.Name,
+                        MobileNumber = string.Empty,
+                        HashPassword = string.Empty,
+                        Dob = new DateOnly(1000, 1, 1),
+                    };
+
+                    user = await _userRepository.RegisterUser(newUser);
+                    if (user == null) { return BadRequest(); }
+                }
+                var authenticatedUserResponse = await _authenticator.Authenticate(user);
+                _authenticator.SetTokenInsideCookie(authenticatedUserResponse.RefreshToken, HttpContext);
+                return Ok(authenticatedUserResponse);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -12,5 +12,7 @@ namespace AuthServerApi.Data
 
         public DbSet<User> users { get; set; }
         public DbSet<RefreshToken> refreshTokens { get; set; }
+
+        public DbSet<MobileOTP> MobileOTPs { get; set; }
     }
 }

@@ -35,7 +35,8 @@ namespace AuthServerApi.Service.Authenticators
             return new AuthenticatedUserResponse()
             {
                 AuthToken = accessToken,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                UserInfo = user.AsUserInfo()
             };
         }
 

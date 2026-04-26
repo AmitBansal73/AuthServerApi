@@ -19,8 +19,10 @@ namespace AuthServerApi.Controllers
         [HttpGet("Users")]
         public async Task<IActionResult> Users()
         {
-          var result = await _userRepository.GetAll();
+            var result = await _userRepository.GetAll();
             return Ok(result);
         }
+
+
     }
 }

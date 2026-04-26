@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AuthServerApi.Model.Responses;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuthServerApi.Model
 {
@@ -19,7 +20,21 @@ namespace AuthServerApi.Model
 
         [Required]
         public string MobileNumber { get; set; }
+
         public DateOnly Dob { get; set; }
+
+        public UserInfo AsUserInfo()
+        {
+            return new UserInfo
+            {
+                Id = Id,
+                Name = Name,
+                Email = Email,
+                MobileNumber = MobileNumber,
+                PictureUrl = "",
+                Dob = new DateOnly()
+            };
+        }
 
     }
 }
