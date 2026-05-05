@@ -18,5 +18,7 @@ namespace AuthServerApi.Service.UserRepositories
 
         Task<bool> VerifyOTP(OTPRequest request);
 
+        Task<bool> UpdatePersonalInfo(UserInfoRequest request);
+
     }
 }

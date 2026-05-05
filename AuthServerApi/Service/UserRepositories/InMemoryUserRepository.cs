@@ -39,6 +39,10 @@ namespace AuthServerApi.Service.UserRepositories
             return Task.FromResult(user);
         }
 
+        public Task<bool> UpdatePersonalInfo(UserInfoRequest request)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<bool> VerifyOTP(OTPRequest request)
         {

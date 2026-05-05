@@ -61,6 +61,25 @@ namespace AuthServerApi.Service.UserRepositories
             return user;
         }
 
+        public async Task<bool> UpdatePersonalInfo(UserInfoRequest request)
+        {
+            var user = await _context.users.FirstOrDefaultAsync(x => x.MobileNumber == request.MobileNumber);
+            if (user == null) return false;
+
+            if (!string.IsNullOrEmpty(request.Name))
+                user.Name = request.Name;
+            if (!string.IsNullOrEmpty(request.Email))
+                user.Email = request.Email;
+            if (!string.IsNullOrEmpty(request.DOB))
+            {
+                if (DateOnly.TryParse(request.DOB, out var dob))
+                    user.Dob = dob;
+            }
+
+            _context.users.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<bool> VerifyOTP(OTPRequest request)
         {

@@ -1,4 +1,5 @@
-﻿using AuthServerApi.Service.UserRepositories;
+﻿using AuthServerApi.Model.Requests;
+using AuthServerApi.Service.UserRepositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,17 @@ namespace AuthServerApi.Controllers
             return Ok(result);
         }
 
+        [Authorize]
+        [HttpPost("UpdatePersonalInfo")]
+        public async Task<IActionResult> UpdatePersonalInfo([FromBody] UserInfoRequest request)
+        {
+            var result = await _userRepository.UpdatePersonalInfo(request);
+            if (result)
+                return Ok(new { message = "Personal information updated successfully" });
+            else
+                return BadRequest(new { message = "Failed to update personal information" });
 
+
+        }
     }
 }

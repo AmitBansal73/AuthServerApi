@@ -361,3 +361,16 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local environment and secrets
+.env
+.env.local
+secrets.json
+appsettings.Development.json
+appsettings.Local.json
+
+# Local remote debugger folder (used in README examples)
+/remote_debugger/
+
+# Docker compose overrides
+docker-compose.override.yml
