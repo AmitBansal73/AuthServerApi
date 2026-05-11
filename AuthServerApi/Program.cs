@@ -62,7 +62,7 @@ var app = builder.Build();
 var service = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScopeFactory));
 using (var db = service.CreateScope().ServiceProvider.GetService<AuthenticationDbContext>())
 {
-    //db.Database.Migrate();
+    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
